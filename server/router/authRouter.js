@@ -39,7 +39,8 @@ authRouter.post("/signup", async (req, res) => {
 
   // Login
 authRouter.post("/login", async (req, res) => {
-    const user = await Users.findOne({  name: req.body.name });
+    const user = await Users.findOne({  email: req.body.email });
+    console.log(user);
     if (!user) {
       return res.status(400).send({ msg: "User not found" });
     }
@@ -61,7 +62,7 @@ authRouter.post("/login", async (req, res) => {
             msg: "Login successfully",
             accessToken: accessToken,
             refreshToken: refreshToken,
-            name: user.name,
+            name: user.firstName,
             userID : user._id
           });
       }
@@ -74,3 +75,10 @@ authRouter.post("/login", async (req, res) => {
   });
 
   module.exports = authRouter;
+
+  // "firstName": "nitesh",
+  // "lastName" : "rawat",
+  // "email" : "nitesh@gmail.com",
+  // "type" : "admin",
+  // "phoneNo" : 1234567898,
+  // "passWord": "1234"
