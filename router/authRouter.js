@@ -40,7 +40,6 @@ authRouter.post("/signup", async (req, res) => {
   // Login
 authRouter.post("/login", async (req, res) => {
     const user = await Users.findOne({  email: req.body.email });
-    console.log(user);
     if (!user) {
       return res.status(400).send({ msg: "User not found" });
     }
@@ -62,7 +61,7 @@ authRouter.post("/login", async (req, res) => {
             msg: "Login successfully",
             accessToken: accessToken,
             refreshToken: refreshToken,
-            name: user.firstName,
+            firstName: user.firstName,
             userID : user._id
           });
       }
