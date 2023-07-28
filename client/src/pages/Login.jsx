@@ -22,7 +22,7 @@ export const Login = () => {
 
     e.preventDefault();
     axios
-      .post("http://localhost:8080/auth/login", login)
+      .post("https://uptight-cod-hose.cyclic.app/auth/login", login)
       .then((res) => {
         localStorage.setItem("pvtroute", JSON.stringify({
           isLoggin : true,
