@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import "./style.css";
-import axios from 'axios';
-import Getbmi from './Getbmi';
+import axios from "axios";
+import GetUserData from "./GetUserData";
 
 const init = {
-    firstName : "",
-    lastName : "",
-    email : "",
-    type : "",
-    phoneNo : ""
-}
+  firstName: "",
+  lastName: "",
+  email: "",
+  type: "",
+  phoneNo: "",
+};
 
 const Dashboard = () => {
   const [userValue, setValue] = useState(init);
@@ -21,42 +21,50 @@ const Dashboard = () => {
     setValue({ ...userValue, [name]: value });
   };
 
-  const handleSubmit = (e)=>{
-    e.preventDefault();
-    let getId = JSON.parse(localStorage.getItem("pvtroute"))
+  const getData = () => {
+    let getId = JSON.parse(localStorage.getItem("pvtroute"));
     axios
-      .post(`http://localhost:8080/user/createData/${getId.userId}`, userValue)
+      .get(`https://uptight-cod-hose.cyclic.app/auth/getUserData/${getId.userId}`)
       .then((res) => {
-        alert("Add Data Successfully");
-        getData();
-        setValue({...init})
-      })
-      .catch((err) => {
-        alert("Something went wrong");
-        console.log("error", err);
-      });
-  }
-  const getData = ()=>{
-    let getId = JSON.parse(localStorage.getItem("pvtroute"))
-    axios
-      .get(`http://localhost:8080/user/getUserData/${getId.userId}`)
-      .then((res) => {
-        setData(res.data.getUserData)
+        setData(res.data.getUserData);
       })
       .catch((err) => {
         console.log("error", err);
       });
-  }
+  };
 
-  useEffect(()=>{
-    getData()
-  })
+  useEffect(() => {
+    let getId = JSON.parse(localStorage.getItem("pvtroute"));
+    if (getId.type == "admin") {
+      getAllData();
+    } else {
+      getData();
+    }
+  }, []);
+
+  const getAllData = () => {
+    axios
+      .get(`https://uptight-cod-hose.cyclic.app/auth/getAll`)
+      .then((res) => {
+        setData(res.data.getAllData);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+
+  let getId = JSON.parse(localStorage.getItem("pvtroute"));
 
   return (
     <div>
-      <div className='data_box'>
+      {/* {   
+      <>
+      {getId.type === "admin" ? (null) : (
+        <div className='data_box'>
         <h1 style={{ fontWeight: "bold",fontSize:"21px" }}>User Data</h1>
-      <form onSubmit={handleSubmit}>
+      <form 
+      onSubmit={handleSubmit}
+      >
         <br />
         <input
           type="text"
@@ -85,15 +93,11 @@ const Dashboard = () => {
           value={userValue.email}
           required
         />
-        <input
-          type="text"
-          name="type"
-          className="last_inp"
-          placeholder="Type"
-          onChange={handleChange}
-          value={userValue.type}
-          required
-        />
+        <select className='last_inp' name='type' onChange={handleChange}>
+          <option value="">Type</option>
+          <option value="user">user</option> */}
+      {/* <option value="admin">admin</option> */}
+      {/* </select>
         <input
           type="text"
           name="phoneNo"
@@ -105,9 +109,16 @@ const Dashboard = () => {
         />
         <input className="btn" type="submit" value="Create" />
       </form>
+      </div> */}
+      {/* )
+      }
+      </> */}
+
+      {/* } */}
+      <div>
+        <GetUserData data={data} getAllData={getAllData} />
       </div>
-      <div><Getbmi data={data}/></div>
     </div>
-  )
-}
-export default Dashboard
+  );
+};
+export default Dashboard;

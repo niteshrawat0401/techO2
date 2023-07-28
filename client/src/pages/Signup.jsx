@@ -25,9 +25,8 @@ export const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:8080/auth/signup", signup)
+      .post("https://uptight-cod-hose.cyclic.app/auth/signup", signup)
       .then((res) => {
-        console.log(res);
         navigate("/");
       })
       .catch((err) => {
@@ -72,7 +71,7 @@ export const Signup = () => {
           required
         />
         <br/>
-        <input
+        {/* <input
           type="password"
           name="type"
           className="inp2"
@@ -80,7 +79,12 @@ export const Signup = () => {
           onChange={handleChange}
           value={signup.type}
           required
-        />
+        /> */}
+        <select className='inp2' name='type' onChange={handleChange}>
+          <option value="">Type</option>
+          <option value="user">user</option>
+          <option value="admin">admin</option>
+        </select>
         <br/>
         <input
           type="number"
