@@ -9,11 +9,21 @@ const authRouter = Router();
 
 // Sign up
 authRouter.post("/signup", async (req, res) => {
-    const { name, email, passWord } = req.body;
+    const { firstName, lastName, email, type, phoneNo, passWord } = req.body;
+
+    let isUniqueEmail = (await Users.countDocuments({ email}) > 0 ? true : false)
+  if(isUniqueEmail){
+    return res.status(400).json({msg: "Email alredy present", isUniqueEmail})
+  }
+
+
     const hashPassword = await bcrypt.hash(passWord, 10);
     const newuser = await new Users({
-      name,
+      firstName,
+      lastName,
       email,
+      type,
+      phoneNo,
       passWord: hashPassword
     });
     newuser.save();
